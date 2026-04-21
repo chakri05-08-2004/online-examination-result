@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'CareerFlow — Find Your Dream Job')}">
+<body>
+<div th:fragment="content">
+
+    <!-- ── HERO ── -->
+    <div class="hero">
+        <div class="hero-eyebrow">✦ &nbsp;#1 Job Portal for Professionals</div>
+        <h1>Land Your <span class="gradient-text">Dream Job</span><br>Faster Than Ever</h1>
+        <p>Connect with world-class employers. Browse curated opportunities and take the next step in your career — all in one place.</p>
+        <div class="hero-cta">
+            <a th:href="@{/jobs}" class="btn btn-glow btn-lg">Explore Jobs →</a>
+            <a th:href="@{/register}" class="btn btn-outline btn-lg" sec:authorize="isAnonymous()">Join as Employer</a>
+        </div>
+        <!-- Stats strip -->
+        <div class="hero-stats">
+            <div class="hero-stat-item">
+                <div class="value">500+</div>
+                <div class="label">Live Jobs</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="value">200+</div>
+                <div class="label">Companies</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="value">10k+</div>
+                <div class="label">Hired</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── FEATURED JOBS ── -->
+    <section style="padding:0 4% 4rem;">
+        <div class="section-header">
+            <h2>Featured <span class="gradient-text">Opportunities</span></h2>
+            <p>Hand-picked roles from top companies actively hiring right now.</p>
+        </div>
+        <div class="job-grid">
+            <div th:each="job, i : ${jobs}" class="job-card"
+                 th:style="'animation-delay:' + ${i.index * 0.07} + 's'">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+                    <div>
+                        <div class="co-name" th:text="${job.employer.name}">Company</div>
+                        <h3 th:text="${job.title}" style="margin-top:.3rem;">Job Title</h3>
+                    </div>
+                    <span class="badge badge-category" th:text="${job.category}">Engineering</span>
+                </div>
+                <div class="meta">
+                    <span>📍 <span th:text="${job.location}">Remote</span></span>
+                    <span>💼 <span th:text="${job.experience}">Mid Level</span></span>
+                </div>
+                <p class="text-sm text-muted" th:text="${#strings.abbreviate(job.description,115)}" style="line-height:1.65;"></p>
+                <div class="card-footer">
+                    <span class="salary" th:text="'$'+${#numbers.formatDecimal(job.salary,0,'COMMA',0,'POINT')}">$100,000</span>
+                    <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline btn-sm">View →</a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:2.5rem;">
+            <a th:href="@{/jobs}" class="btn btn-ghost btn-lg">View All Jobs →</a>
+        </div>
+    </section>
+
+    <!-- ── WHY CAREERFLOW ── -->
+    <section style="padding:3rem 0 1rem;">
+        <div class="section-header">
+            <h2>Why <span class="gradient-text">CareerFlow</span>?</h2>
+            <p>Everything you need to land your next role, in one place.</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(124,58,237,.15);color:var(--violet-light);">🎯</div>
+                <h3>Smart Matching</h3>
+                <p>Advanced filters connect you with roles that match your skills, experience level, and location preferences.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(6,182,212,.15);color:var(--cyan-light);">⚡</div>
+                <h3>One-Click Apply</h3>
+                <p>Upload your resume once and apply to multiple positions instantly — no repetitive forms.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(16,185,129,.15);color:var(--emerald);">📊</div>
+                <h3>Live Tracking</h3>
+                <p>Monitor all your applications in real time — from submitted to shortlisted, all in your dashboard.</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Post Job — CareerFlow')}">
+<body>
+<div th:fragment="content">
+
+    <div style="max-width:860px; margin:3rem auto; padding:0 1.5rem;">
+
+        <!-- Back link -->
+        <a th:href="@{/employer/dashboard}" class="btn btn-outline btn-sm"
+           style="margin-bottom:1.5rem;">← Back to Dashboard</a>
+
+        <div class="card">
+
+            <div style="margin-bottom:2rem;">
+                <h1 style="font-size:1.75rem;"
+                    th:text="${job.id == null ? '➕ Post New Job' : '✏️ Edit Job Posting'}">Post Job</h1>
+                <p class="text-muted text-sm" style="margin-top:.35rem;">
+                    Fill in the details below and start receiving applications from qualified candidates.
+                </p>
+            </div>
+
+            <form th:action="${job.id == null ? '/jobs/new' : '/jobs/edit/' + job.id}"
+                  th:object="${job}"
+                  method="post">
+
+                <!-- Title (full width) -->
+                <div class="form-group">
+                    <label class="form-label" for="job-title">Job Title *</label>
+                    <input id="job-title" type="text" th:field="*{title}"
+                           class="form-control"
+                           placeholder="e.g. Senior Backend Engineer"
+                           required>
+                </div>
+
+                <!-- Row: Category, Location, Salary, Experience -->
+                <div class="grid-2" style="margin-bottom:1.4rem;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="job-category">Category *</label>
+                        <select id="job-category" th:field="*{category}" class="form-control" required>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Design">Design</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Customer Support">Customer Support</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="job-location">Location *</label>
+                        <input id="job-location" type="text" th:field="*{location}"
+                               class="form-control"
+                               placeholder="City or Remote"
+                               required>
+                    </div>
+                </div>
+
+                <div class="grid-2" style="margin-bottom:1.4rem;">
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="job-salary">Annual Salary (USD) *</label>
+                        <input id="job-salary" type="number" th:field="*{salary}"
+                               class="form-control"
+                               placeholder="100000"
+                               required>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="job-experience">Experience Level *</label>
+                        <select id="job-experience" th:field="*{experience}" class="form-control" required>
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Mid Level">Mid Level</option>
+                            <option value="Senior Level">Senior Level</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                <div class="form-group">
+                    <label class="form-label" for="job-skills">Required Skills *</label>
+                    <input id="job-skills" type="text" th:field="*{skillsRequired}"
+                           class="form-control"
+                           placeholder="e.g. Java, Spring Boot, MySQL (comma separated)"
+                           required>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label class="form-label" for="job-description">Job Description *</label>
+                    <textarea id="job-description" th:field="*{description}"
+                              class="form-control"
+                              rows="10"
+                              placeholder="Describe the role, responsibilities, and requirements..."
+                              required></textarea>
+                </div>
+
+                <hr class="divider">
+
+                <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                    <button id="btn-save-job" type="submit" class="btn btn-primary btn-lg">
+                        Save Job Posting →
+                    </button>
+                    <a th:href="@{/employer/dashboard}" class="btn btn-outline btn-lg">Cancel</a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

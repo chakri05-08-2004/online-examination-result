@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Applicants — ' + ${job.title})}">
+<body>
+<div th:fragment="content">
+    <div style="max-width:1150px; margin:3rem auto; padding:0 1.5rem;">
+        
+        <a th:href="@{/employer/dashboard}" class="btn btn-ghost btn-sm" style="margin-bottom:1.5rem;">← Back to Dashboard</a>
+
+        <div class="page-header" style="margin-bottom:2.5rem;">
+            <div>
+                <h1 th:text="'Applicants: ' + ${job.title}">Applicants</h1>
+                <p class="text-muted mt-1" th:text="${job.location} + ' · ' + ${#lists.size(applicants)} + ' matching candidates'">Remote · 0 applications</p>
+            </div>
+            <span class="badge badge-category" th:text="${#lists.size(applicants)} + ' candidates'" style="padding:.5rem 1.2rem;font-size:.9rem;align-self:flex-start;">0</span>
+        </div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Candidate</th><th>Email</th><th>Applied</th><th>Resume</th><th>Status</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="app : ${applicants}">
+                            <td>
+                                <div style="display:flex; align-items:center; gap:.85rem;">
+                                    <div class="avatar" th:text="${#strings.substring(app.student.name, 0, 1)}">J</div>
+                                    <span class="font-semibold" th:text="${app.student.name}">John Doe</span>
+                                </div>
+                            </td>
+                            <td class="text-muted text-sm" th:text="${app.student.email}">john@example.com</td>
+                            <td class="text-muted text-sm" th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy')}">15 Apr 2024</td>
+                            <td>
+                                <a th:href="'/uploads/' + ${app.resumePath}" target="_blank" class="btn btn-ghost btn-sm">📄 View</a>
+                            </td>
+                            <td>
+                                <span th:class="'badge badge-' + ${#strings.toLowerCase(app.status)}" th:text="${app.status}">APPLIED</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/applications/{id}/status(id=${app.id})}" method="post" style="display:flex;gap:.5rem;flex-wrap:wrap;">
+                                    <input type="hidden" name="jobId" th:value="${job.id}">
+                                    <button type="submit" name="status" value="SHORTLISTED" class="btn btn-success btn-sm">✅</button>
+                                    <button type="submit" name="status" value="REJECTED" class="btn btn-danger btn-sm">✗</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(applicants)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <span class="empty-icon">📭</span>
+                                    <h3>No applicants yet</h3>
+                                    <p>Candidates who apply for this position will appear here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

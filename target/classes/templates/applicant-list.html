@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Applicants — ' + ${job.title})}">
+<body>
+<div th:fragment="content">
+
+    <div style="max-width:1100px; margin:3rem auto; padding:0 1.5rem;">
+
+        <!-- Back link -->
+        <a th:href="@{/employer/dashboard}" class="btn btn-outline btn-sm"
+           style="margin-bottom:1.5rem;">← Back to Dashboard</a>
+
+        <!-- Page header -->
+        <div class="page-header" style="margin-bottom:2rem;">
+            <div>
+                <h1 style="font-size:1.75rem;"
+                    th:text="'Applicants: ' + ${job.title}">Applicants</h1>
+                <p class="text-muted"
+                   th:text="${job.location} + ' · ' + ${#lists.size(applicants)} + ' total applications'">
+                    Remote · 0 applications
+                </p>
+            </div>
+            <span class="badge badge-category"
+                  th:text="${#lists.size(applicants)} + ' candidates'"
+                  style="padding:.4rem 1rem; font-size:.85rem; align-self:flex-start;">0</span>
+        </div>
+
+        <!-- Table card -->
+        <div class="card" style="padding:0; overflow:hidden;">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Candidate</th>
+                            <th>Email</th>
+                            <th>Applied</th>
+                            <th>Resume</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="app : ${applicants}">
+                            <td>
+                                <div style="display:flex; align-items:center; gap:.75rem;">
+                                    <div style="width:36px; height:36px; border-radius:50%;
+                                                background:linear-gradient(135deg, var(--accent), var(--primary));
+                                                display:flex; align-items:center; justify-content:center;
+                                                font-size:.8rem; font-weight:700; color:#fff; flex-shrink:0;"
+                                         th:text="${#strings.substring(app.student.name, 0, 1)}">J</div>
+                                    <span class="font-semibold" th:text="${app.student.name}">John Doe</span>
+                                </div>
+                            </td>
+                            <td class="text-muted text-sm" th:text="${app.student.email}">john@example.com</td>
+                            <td class="text-muted text-sm"
+                                th:text="${#temporals.format(app.appliedAt, 'dd MMM yyyy')}">15 Apr 2024</td>
+                            <td>
+                                <a th:href="'/uploads/' + ${app.resumePath}"
+                                   target="_blank"
+                                   class="btn btn-outline btn-sm">
+                                    📄 View
+                                </a>
+                            </td>
+                            <td>
+                                <span th:class="'badge badge-' + ${#strings.toLowerCase(app.status)}"
+                                      th:text="${app.status}">APPLIED</span>
+                            </td>
+                            <td>
+                                <form th:action="@{/applications/{id}/status(id=${app.id})}"
+                                      method="post"
+                                      style="display:flex; gap:.45rem; flex-wrap:wrap;">
+                                    <input type="hidden" name="jobId" th:value="${job.id}">
+                                    <button id="${'btn-shortlist-' + app.id}"
+                                            type="submit" name="status" value="SHORTLISTED"
+                                            class="btn btn-sm"
+                                            style="background:rgba(16,185,129,.15); color:var(--success);
+                                                   border:1px solid rgba(16,185,129,.35);">
+                                        ✅ Shortlist
+                                    </button>
+                                    <button id="${'btn-reject-' + app.id}"
+                                            type="submit" name="status" value="REJECTED"
+                                            class="btn btn-danger btn-sm">
+                                        ✗ Reject
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(applicants)}">
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-icon">📭</div>
+                                    <h3>No applications yet</h3>
+                                    <p>Candidates who apply to this job will appear here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</body>
+</html>

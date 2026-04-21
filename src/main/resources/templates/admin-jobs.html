@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Manage Jobs — CareerFlow')}">
+<body>
+<div th:fragment="content">
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="sidebar-title">Admin Panel</div>
+        <ul class="sidebar-nav">
+            <li><a th:href="@{/admin/dashboard}"><span class="nav-icon">📊</span>Overview</a></li>
+            <li><a th:href="@{/admin/users}"><span class="nav-icon">👥</span>Manage Users</a></li>
+            <li><a th:href="@{/admin/jobs}" class="active"><span class="nav-icon">💼</span>Manage Jobs</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="page-header">
+            <div><h1>Manage Jobs</h1><p>All active job postings on the platform.</p></div>
+            <span class="badge badge-category" th:text="${#lists.size(jobs)} + ' postings'" style="padding:.4rem 1rem;font-size:.82rem;align-self:flex-start;">0</span>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>#</th><th>Job Title</th><th>Employer</th><th>Category</th><th>Location</th><th>Salary</th><th>Posted</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="job, stat : ${jobs}">
+                            <td class="text-dim font-semibold" th:text="${stat.count}">1</td>
+                            <td>
+                                <a th:href="@{/jobs/{id}(id=${job.id})}" th:text="${job.title}"
+                                   class="text-primary font-semibold" style="text-decoration:none;">Software Engineer</a>
+                            </td>
+                            <td class="text-muted text-sm" th:text="${job.employer != null ? job.employer.name : 'N/A'}">TechCorp</td>
+                            <td><span class="badge badge-category" th:text="${job.category}">Engineering</span></td>
+                            <td class="text-muted text-sm" th:text="${job.location}">Remote</td>
+                            <td class="text-success font-semibold text-sm"
+                                th:text="'$'+${#numbers.formatDecimal(job.salary,0,'COMMA',0,'POINT')}">$100,000</td>
+                            <td class="text-muted text-sm"
+                                th:text="${job.postedAt != null ? #temporals.format(job.postedAt,'MMM dd, yyyy') : 'N/A'}">Jan 01, 2024</td>
+                            <td>
+                                <a th:href="@{/jobs/delete/{id}(id=${job.id})}"
+                                   onclick="return confirm('Permanently delete this job?')"
+                                   class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(jobs)}">
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <span class="empty-icon">💼</span>
+                                    <h3>No jobs yet</h3><p>Job postings will appear here.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
+</body>
+</html>

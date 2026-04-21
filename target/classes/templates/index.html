@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'CareerFlow — Find Your Dream Job')}">
+<body>
+<div th:fragment="content">
+
+    <!-- HERO -->
+    <section style="padding: 7rem 5% 3rem; text-align: center; max-width: 900px; margin: 0 auto; animation: fadeUp .8s ease both;">
+        <div class="hero-eyebrow">
+            ✨ &nbsp;Your next opportunity is one click away
+        </div>
+        <h1 style="font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 800; margin-bottom: 1.25rem; line-height: 1.1;">
+            Find Your <span class="gradient-text">Dream Job</span><br>Today
+        </h1>
+        <p style="font-size: 1.15rem; color: var(--text-muted); max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.75;">
+            Connect with top employers and take the next step in your professional journey. Hundreds of opportunities waiting for you.
+        </p>
+        <div class="hero-actions">
+            <a th:href="@{/jobs}" class="btn btn-primary btn-lg">Browse Jobs →</a>
+            <a th:href="@{/register}" class="btn btn-outline btn-lg" sec:authorize="isAnonymous()">Join as Employer</a>
+        </div>
+
+        <!-- Quick stats -->
+        <div class="hero-stats" style="margin-top: 4rem;">
+            <div class="hero-stat-item">
+                <div class="value">500+</div>
+                <div class="label">Active Jobs</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="value">200+</div>
+                <div class="label">Companies Hiring</div>
+            </div>
+            <div class="hero-stat-item">
+                <div class="value">10k+</div>
+                <div class="label">Successful Hires</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED JOBS -->
+    <section style="padding: 4rem 5% 2rem;">
+        <div class="section-header">
+            <h2>Featured <span class="gradient-text">Opportunities</span></h2>
+            <p>Hand-picked roles from top companies actively hiring right now.</p>
+        </div>
+
+        <div class="job-grid">
+            <div th:each="job, iterStat : ${jobs}"
+                 class="job-card"
+                 th:style="'animation-delay:' + ${iterStat.index * 0.08} + 's'">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                    <div>
+                        <div class="company" th:text="${job.employer.name}">Company Name</div>
+                        <h3 th:text="${job.title}" style="margin-top:.3rem;">Job Title</h3>
+                    </div>
+                    <span class="badge badge-category" th:text="${job.category}">Engineering</span>
+                </div>
+                <div class="meta">
+                    <span>📍 <span th:text="${job.location}">Remote</span></span>
+                    <span>💼 <span th:text="${job.experience}">Mid Level</span></span>
+                </div>
+                <p class="text-sm text-muted" th:text="${#strings.abbreviate(job.description, 110)}" style="line-height:1.6;"></p>
+                <div class="footer">
+                    <span class="salary" th:text="'$' + ${#numbers.formatDecimal(job.salary, 0, 'COMMA', 0, 'POINT')}">$100,000</span>
+                    <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-outline btn-sm">View Details →</a>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:3rem;">
+            <a th:href="@{/jobs}" class="btn btn-outline">View All Jobs →</a>
+        </div>
+    </section>
+
+    <!-- WHY CAREERFLOW -->
+    <section style="padding: 5rem 5%;">
+        <div class="section-header">
+            <h2>Why <span class="gradient-text">CareerFlow</span>?</h2>
+            <p>Everything you need to land your next role, in one place.</p>
+        </div>
+        <div class="features-grid" style="padding:0;">
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(99,102,241,.12); color:var(--primary-light);">🎯</div>
+                <h3>Smart Matching</h3>
+                <p>Our platform connects job seekers with the most relevant opportunities based on skills and experience.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(6,182,212,.12); color:var(--accent);">⚡</div>
+                <h3>One-Click Apply</h3>
+                <p>Upload your resume once and apply to multiple positions instantly without any repetitive forms.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon" style="background:rgba(16,185,129,.12); color:var(--success);">📊</div>
+                <h3>Track Your Progress</h3>
+                <p>Monitor all your applications in real time — from submitted to shortlisted, all in your dashboard.</p>
+            </div>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>

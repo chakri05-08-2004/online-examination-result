@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content, title)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">CareerFlow</title>
+    <meta name="description" content="CareerFlow — Connect with top employers and land your dream job.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <nav>
+        <a th:href="@{/}" class="logo">
+            ⚡&nbsp;Career<span class="logo-dot">Flow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a th:href="@{/jobs}">Browse Jobs</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/login}">Sign In</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a th:href="@{/register}" class="btn btn-primary btn-sm">Get Started</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}" class="btn btn-ghost btn-sm">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div th:replace="${content}"></div>
+
+    <footer>
+        <p>© 2024 <span>CareerFlow</span> — Built with ❤ using Spring Boot &amp; Thymeleaf.</p>
+    </footer>
+
+    <script th:src="@{/js/main.js}"></script>
+</body>
+</html>

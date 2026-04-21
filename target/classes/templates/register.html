@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Create Account — CareerFlow')}">
+<body>
+<div th:fragment="content">
+
+    <div class="auth-wrapper">
+        <div class="auth-card" style="max-width:480px;">
+
+            <!-- Logo -->
+            <div class="auth-logo">
+                <span class="logo">⚡ CareerFlow</span>
+            </div>
+
+            <h2>Create your account</h2>
+            <p class="subtitle">Join thousands of professionals on CareerFlow</p>
+
+            <form th:action="@{/register}" th:object="${user}" method="post" style="margin-top: 1.5rem;">
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-name">Full Name</label>
+                    <input id="reg-name"
+                           type="text"
+                           th:field="*{name}"
+                           class="form-control"
+                           placeholder="John Doe"
+                           autocomplete="name"
+                           required>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-error"></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email address</label>
+                    <input id="reg-email"
+                           type="email"
+                           th:field="*{email}"
+                           class="form-control"
+                           placeholder="you@example.com"
+                           autocomplete="email"
+                           required>
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-error"></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Password</label>
+                    <input id="reg-password"
+                           type="password"
+                           th:field="*{password}"
+                           class="form-control"
+                           placeholder="At least 6 characters"
+                           autocomplete="new-password"
+                           required>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-error"></p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="reg-role">I am a:</label>
+                    <select id="reg-role"
+                            th:field="*{role}"
+                            class="form-control"
+                            required>
+                        <option value="STUDENT">🎓 &nbsp;Student / Job Seeker</option>
+                        <option value="EMPLOYER">🏢 &nbsp;Employer / Recruiter</option>
+                    </select>
+                </div>
+
+                <button id="btn-register"
+                        type="submit"
+                        class="btn btn-primary btn-block"
+                        style="margin-top: 1.25rem; padding: .75rem;">
+                    Create Account →
+                </button>
+            </form>
+
+            <hr class="divider">
+
+            <p class="auth-footer">
+                Already have an account?
+                <a th:href="@{/login}">Sign in</a>
+            </p>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

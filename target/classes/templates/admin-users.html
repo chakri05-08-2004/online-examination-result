@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Manage Users — CareerFlow')}">
+<body>
+<div th:fragment="content">
+    <div class="dashboard-container">
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-title">Admin Panel</div>
+                <ul class="sidebar-nav">
+                    <li>
+                        <a th:href="@{/admin/dashboard}">
+                            <span class="nav-icon">📊</span> Overview
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/users}" class="active">
+                            <span class="nav-icon">👥</span> Manage Users
+                        </a>
+                    </li>
+                    <li>
+                        <a th:href="@{/admin/jobs}">
+                            <span class="nav-icon">💼</span> Manage Jobs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+
+        <!-- ── MAIN CONTENT ── -->
+        <main class="main-content">
+
+            <div class="page-header">
+                <div>
+                    <h1>Manage Users</h1>
+                    <p>View and remove registered users from the platform.</p>
+                </div>
+                <!-- User count badge -->
+                <span class="badge badge-admin"
+                      th:text="${#lists.size(users)} + ' users total'"
+                      style="align-self:flex-start; padding:.4rem 1rem; font-size:.85rem;">0 users</span>
+            </div>
+
+            <div class="card" style="padding:0; overflow:hidden;">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user, stat : ${users}">
+                                <td class="text-dim font-semibold" th:text="${stat.count}">1</td>
+                                <td>
+                                    <div style="display:flex; align-items:center; gap:.75rem;">
+                                        <div style="width:34px; height:34px; border-radius:50%;
+                                                    background:linear-gradient(135deg, var(--primary), var(--accent));
+                                                    display:flex; align-items:center; justify-content:center;
+                                                    font-size:.8rem; font-weight:700; color:#fff; flex-shrink:0;"
+                                             th:text="${#strings.substring(user.name,0,1)}">J</div>
+                                        <span class="font-semibold" th:text="${user.name}">John Doe</span>
+                                    </div>
+                                </td>
+                                <td class="text-muted text-sm" th:text="${user.email}">john@example.com</td>
+                                <td>
+                                    <span th:text="${user.role}"
+                                          th:classappend="${user.role.name() == 'ADMIN'} ? 'badge badge-admin' : (${user.role.name() == 'EMPLOYER'} ? 'badge badge-employer' : 'badge badge-student')">
+                                        STUDENT
+                                    </span>
+                                </td>
+                                <td class="text-muted text-sm"
+                                    th:text="${user.createdAt != null ? #temporals.format(user.createdAt, 'MMM dd, yyyy') : 'N/A'}">
+                                    Jan 01, 2024
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/users/delete/{id}(id=${user.id})}"
+                                       id="${'btn-delete-user-' + user.id}"
+                                       onclick="return confirm('Permanently delete this user?')"
+                                       class="btn btn-danger btn-sm">
+                                        Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(users)}">
+                                <td colspan="6">
+                                    <div class="empty-state">
+                                        <div class="empty-icon">👤</div>
+                                        <h3>No users yet</h3>
+                                        <p>Registered users will appear here.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+</body>
+</html>

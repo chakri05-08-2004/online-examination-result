@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Employer Dashboard — CareerFlow')}">
+<body>
+<div th:fragment="content">
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="sidebar-title">Employer Hub</div>
+        <ul class="sidebar-nav">
+            <li><a th:href="@{/employer/dashboard}" class="active"><span class="nav-icon">🏠</span>My Postings</a></li>
+            <li><a th:href="@{/jobs/new}"><span class="nav-icon">➕</span>Post a Job</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 th:text="'Welcome, ' + ${user.name} + ' 👋'">Welcome, Employer</h1>
+                <p>Manage your job listings and review applicants.</p>
+            </div>
+            <a th:href="@{/jobs/new}" class="btn btn-glow">➕ Post New Job</a>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card stat-violet">
+                <div class="stat-icon">💼</div>
+                <div class="stat-value" th:text="${#lists.size(jobs)}">0</div>
+                <div class="stat-label">Active Postings</div>
+            </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+            <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);
+                        display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="font-size:1rem;">Recent Job Postings</h3>
+                <a th:href="@{/jobs/new}" class="btn btn-primary btn-sm">+ New Posting</a>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Job Title</th><th>Location</th><th>Posted On</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="job : ${jobs}">
+                            <td>
+                                <div class="font-semibold" th:text="${job.title}">Software Engineer</div>
+                                <div class="mt-1">
+                                    <span class="badge badge-category" th:text="${job.category}">Engineering</span>
+                                </div>
+                            </td>
+                            <td class="text-muted text-sm" th:text="${job.location}">Remote</td>
+                            <td class="text-muted text-sm"
+                                th:text="${#temporals.format(job.postedAt,'dd MMM yyyy')}">10 Apr 2024</td>
+                            <td>
+                                <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap;">
+                                    <a th:href="@{/applicants/{id}(id=${job.id})}" class="btn btn-outline btn-sm">👥 Applicants</a>
+                                    <a th:href="@{/jobs/edit/{id}(id=${job.id})}" class="btn btn-sm"
+                                       style="background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);">✏️ Edit</a>
+                                    <a th:href="@{/jobs/delete/{id}(id=${job.id})}"
+                                       onclick="return confirm('Delete this job posting?')"
+                                       class="btn btn-danger btn-sm">🗑 Delete</a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(jobs)}">
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <span class="empty-icon">💼</span>
+                                    <h3>No jobs posted yet</h3>
+                                    <p>Create your first job listing to start receiving applications.</p>
+                                    <a th:href="@{/jobs/new}" class="btn btn-primary mt-3">Post First Job →</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout(~{::content}, 'Sign In — CareerFlow')}">
+<body>
+<div th:fragment="content">
+
+    <div class="auth-wrapper">
+        <div class="auth-card">
+
+            <div class="auth-logo">
+                <span class="logo" style="justify-content:center;font-size:1.5rem;">⚡ CareerFlow</span>
+            </div>
+
+            <h2>Welcome back</h2>
+            <p class="subtitle">Sign in to your account to continue</p>
+
+            <div th:if="${param.error}" class="alert alert-error">
+                ⚠️&nbsp; Invalid email or password. Please try again.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success">
+                ✅&nbsp; You've been signed out successfully.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email Address</label>
+                    <input id="login-email" type="email" name="username"
+                           class="form-control" placeholder="you@example.com"
+                           autocomplete="email" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <input id="login-password" type="password" name="password"
+                           class="form-control" placeholder="••••••••"
+                           autocomplete="current-password" required>
+                </div>
+                <button type="submit" class="btn btn-glow btn-block"
+                        style="margin-top:1.25rem;padding:.85rem;">
+                    Sign In →
+                </button>
+            </form>
+
+            <hr class="divider">
+            <p class="auth-footer">
+                Don't have an account? <a th:href="@{/register}">Create one free</a>
+            </p>
+
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
