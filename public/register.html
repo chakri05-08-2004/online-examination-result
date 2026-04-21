@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content, title)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">CareerFlow</title>
+    <meta name="description" content="CareerFlow — Connect with top employers and land your dream job.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            ⚡&nbsp;Career<span class="logo-dot">Flow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="job-list.html">Browse Jobs</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="login.html">Sign In</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}" class="btn btn-ghost btn-sm">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    
+
+    <div class="auth-wrapper">
+        <div class="auth-card" style="max-width:480px;">
+
+            <div class="auth-logo">
+                <span class="logo" style="justify-content:center;font-size:1.5rem;">⚡ CareerFlow</span>
+            </div>
+
+            <h2>Create your account</h2>
+            <p class="subtitle">Join thousands of professionals on CareerFlow</p>
+
+            <form th:action="@{/register}" th:object="${user}" method="post">
+                <div class="form-group">
+                    <label class="form-label" for="reg-name">Full Name</label>
+                    <input id="reg-name" type="text" th:field="*{name}"
+                           class="form-control" placeholder="John Doe"
+                           autocomplete="name" required>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-error"></p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email Address</label>
+                    <input id="reg-email" type="email" th:field="*{email}"
+                           class="form-control" placeholder="you@example.com"
+                           autocomplete="email" required>
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-error"></p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Password</label>
+                    <input id="reg-password" type="password" th:field="*{password}"
+                           class="form-control" placeholder="At least 6 characters"
+                           autocomplete="new-password" required>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="form-error"></p>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-role">I am a:</label>
+                    <select id="reg-role" th:field="*{role}" class="form-control" required style="background:rgba(0,0,0,.5);">
+                        <option value="STUDENT">🎓 &nbsp;Student / Job Seeker</option>
+                        <option value="EMPLOYER">🏢 &nbsp;Employer / Recruiter</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-glow btn-block"
+                        style="margin-top:1.25rem;padding:.85rem;">
+                    Create Account →
+                </button>
+            </form>
+
+            <hr class="divider">
+            <p class="auth-footer">
+                Already have an account? <a th:href="@{/login}">Sign in</a>
+            </p>
+
+        </div>
+    </div>
+
+
+
+    <footer>
+        <p>© 2024 <span>CareerFlow</span> — Built with ❤ using Spring Boot &amp; Thymeleaf.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

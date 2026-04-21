@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content, title)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">CareerFlow</title>
+    <meta name="description" content="CareerFlow — Connect with top employers and land your dream job.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            ⚡&nbsp;Career<span class="logo-dot">Flow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="job-list.html">Browse Jobs</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="login.html">Sign In</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}" class="btn btn-ghost btn-sm">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    
+
+    <div class="page-banner">
+        <h1>Explore <span class="gradient-text">Opportunities</span></h1>
+        <p class="text-muted">Find the perfect role that matches your skills and passion.</p>
+    </div>
+
+    <div class="two-col">
+        <!-- Filter -->
+        <aside>
+            <div class="filter-card">
+                <h3>🔍 Filter Jobs</h3>
+                <form th:action="@{/jobs}" method="get">
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Design">Design</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Sales">Sales</option>
+                            <option value="Customer Support">Customer Support</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" placeholder="City or Remote">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Experience</label>
+                        <select name="experience" class="form-control">
+                            <option value="">Any Level</option>
+                            <option value="Entry Level">Entry Level</option>
+                            <option value="Mid Level">Mid Level</option>
+                            <option value="Senior Level">Senior Level</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block" style="margin-bottom:.5rem;">Apply Filters</button>
+                    <a th:href="@{/jobs}" class="btn btn-ghost btn-block">Clear All</a>
+                </form>
+            </div>
+        </aside>
+
+        <!-- Listings -->
+        <div style="display:flex;flex-direction:column;gap:.9rem;">
+            <p class="text-sm text-muted" th:if="${!#lists.isEmpty(jobs)}"
+               th:text="${#lists.size(jobs)} + ' jobs found'" style="padding:.2rem 0;"></p>
+
+            <div th:each="job, i : ${jobs}" class="job-row"
+                 th:style="'animation-delay:' + ${i.index * 0.06} + 's'">
+                <div class="info">
+                    <div class="co" th:text="${job.employer.name}">Company</div>
+                    <h3 th:text="${job.title}">Job Title</h3>
+                    <div class="meta">
+                        <span>📍 <span th:text="${job.location}">Remote</span></span>
+                        <span>💼 <span th:text="${job.experience}">Mid Level</span></span>
+                        <span class="text-success font-semibold"
+                              th:text="'$'+${#numbers.formatDecimal(job.salary,0,'COMMA',0,'POINT')}">$100k</span>
+                        <span class="badge badge-category" th:text="${job.category}">Engineering</span>
+                    </div>
+                </div>
+                <a th:href="@{/jobs/{id}(id=${job.id})}" class="btn btn-primary btn-sm">Apply Now →</a>
+            </div>
+
+            <div th:if="${#lists.isEmpty(jobs)}" class="empty-state">
+                <span class="empty-icon">🔍</span>
+                <h3>No jobs found</h3>
+                <p>Try adjusting your filters or check back later.</p>
+                <a th:href="@{/jobs}" class="btn btn-outline mt-3">Clear Filters</a>
+            </div>
+        </div>
+    </div>
+
+
+
+    <footer>
+        <p>© 2024 <span>CareerFlow</span> — Built with ❤ using Spring Boot &amp; Thymeleaf.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

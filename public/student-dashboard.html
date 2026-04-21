@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(content, title)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">CareerFlow</title>
+    <meta name="description" content="CareerFlow — Connect with top employers and land your dream job.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <nav>
+        <a href="index.html" class="logo">
+            ⚡&nbsp;Career<span class="logo-dot">Flow</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="job-list.html">Browse Jobs</a></li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/dashboard}">Dashboard</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="login.html">Sign In</a>
+            </li>
+            <li sec:authorize="isAnonymous()">
+                <a href="register.html" class="btn btn-primary btn-sm">Get Started</a>
+            </li>
+            <li sec:authorize="isAuthenticated()">
+                <a th:href="@{/logout}" class="btn btn-ghost btn-sm">Logout</a>
+            </li>
+        </ul>
+    </nav>
+
+    
+<div class="dashboard-container">
+    <aside class="sidebar">
+        <div class="sidebar-title">Student Hub</div>
+        <ul class="sidebar-nav">
+            <li><a th:href="@{/student/dashboard}" class="active"><span class="nav-icon">🏠</span>My Dashboard</a></li>
+            <li><a th:href="@{/jobs}"><span class="nav-icon">🔍</span>Browse Jobs</a></li>
+            <li><a th:href="@{/profile}"><span class="nav-icon">👤</span>Update Profile</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 th:text="'Hello, ' + ${user.name} + ' 👋'">Hello, Student</h1>
+                <p>Track your applications and discover new opportunities.</p>
+            </div>
+            <a th:href="@{/jobs}" class="btn btn-primary btn-sm">Browse Jobs →</a>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card stat-violet">
+                <div class="stat-icon">📋</div>
+                <div class="stat-value" th:text="${#lists.size(applications)}">0</div>
+                <div class="stat-label">Applications Sent</div>
+            </div>
+            <div class="stat-card stat-green">
+                <div class="stat-icon">✅</div>
+                <div class="stat-value"
+                     th:text="${#lists.size(applications.?[status.name() == 'SHORTLISTED'])}">0</div>
+                <div class="stat-label">Shortlisted</div>
+            </div>
+        </div>
+        <div class="card" style="padding:0;overflow:hidden;">
+            <div style="padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);
+                        display:flex;justify-content:space-between;align-items:center;">
+                <h3 style="font-size:1rem;">My Applications</h3>
+                <span class="text-muted text-sm" th:text="${#lists.size(applications)} + ' total'">0 total</span>
+            </div>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr><th>Job Title</th><th>Employer</th><th>Applied On</th><th>Status</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="app : ${applications}">
+                            <td class="font-semibold" th:text="${app.job.title}">Software Engineer</td>
+                            <td class="text-muted text-sm" th:text="${app.job.employer.name}">Google</td>
+                            <td class="text-muted text-sm" th:text="${#temporals.format(app.appliedAt,'dd MMM yyyy')}">15 Apr 2024</td>
+                            <td>
+                                <span th:class="'badge badge-' + ${#strings.toLowerCase(app.status)}"
+                                      th:text="${app.status}">APPLIED</span>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(applications)}">
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <span class="empty-icon">📭</span>
+                                    <h3>No applications yet</h3>
+                                    <p>Start browsing jobs and submit your first application!</p>
+                                    <a th:href="@{/jobs}" class="btn btn-outline mt-3">Browse Jobs →</a>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+
+    <footer>
+        <p>© 2024 <span>CareerFlow</span> — Built with ❤ using Spring Boot &amp; Thymeleaf.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
